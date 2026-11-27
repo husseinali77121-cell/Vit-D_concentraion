@@ -35,6 +35,11 @@ a, b, c, d, knots = natural_cubic_spline(x_data, y_data)
 abs_input = st.number_input("أدخل قيمة الامتصاصية (Absorbance):", format="%.4f")
 
 if st.button("حساب التركيز"):
+    # تحذير لو الامتصاصية برا مدى الستاندردات (الـ cubic برا المدى بيدّي أرقام غير موثوقة)
+    if abs_input < knots[0] or abs_input > knots[-1]:
+        st.warning(f"⚠️ الامتصاصية {abs_input:.4f} برا مدى المعايرة "
+                   f"({knots[0]:.4f} – {knots[-1]:.4f}). النتيجة تقديرية وغير موثوقة؛ "
+                   "يُنصح بالتخفيف وإعادة القياس.")
     idx = np.searchsorted(knots, abs_input) - 1
     idx = max(0, min(idx, len(knots)-2))
     dx = abs_input - knots[idx]
